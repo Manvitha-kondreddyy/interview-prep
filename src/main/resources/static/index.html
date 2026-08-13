@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI Interview Prep</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #ddd8cc;
+      color: #4a4a46;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+
+    h1 { font-size: 2rem; color: #4a4a46; margin-bottom: 6px; letter-spacing: 0.01em; }
+    p.subtitle { color: #848381; margin-bottom: 30px; font-size: 0.95rem; }
+
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .tab {
+      padding: 10px 18px;
+      border-radius: 8px;
+      border: 1.5px solid #BBBCA7;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.85rem;
+      background: #BBBCA7;
+      color: #4a4a46;
+      transition: all 0.2s;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .tab.active { background: #969A82; color: #f0ede6; border-color: #969A82; }
+    .tab:hover { background: #969A82; color: #f0ede6; border-color: #969A82; }
+
+    .card {
+      background: #f0ede6;
+      border-radius: 16px;
+      padding: 30px;
+      width: 100%;
+      max-width: 650px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      border: 1.5px solid #BBBCA7;
+    }
+
+    .section { display: none; }
+    .section.active { display: block; }
+
+    label { display: block; margin-bottom: 8px; font-weight: 600; color: #5a5c50; margin-top: 16px; }
+
+    input[type="file"] {
+      width: 100%;
+      padding: 10px;
+      background: #E6E1D5;
+      border: 2px dashed #969A82;
+      border-radius: 10px;
+      color: #848381;
+      margin-bottom: 10px;
+      cursor: pointer;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      background: #E6E1D5;
+      border: 1.5px solid #BBBCA7;
+      border-radius: 10px;
+      color: #4a4a46;
+      font-size: 0.95rem;
+      margin-bottom: 16px;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    input[type="text"]:focus { outline: none; border-color: #969A82; }
+
+    textarea {
+      width: 100%;
+      padding: 12px;
+      background: #E6E1D5;
+      border: 1.5px solid #BBBCA7;
+      border-radius: 10px;
+      color: #4a4a46;
+      font-size: 0.9rem;
+      resize: vertical;
+      margin-bottom: 16px;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    textarea:focus { outline: none; border-color: #969A82; }
+
+    .main-btn {
+      width: 100%;
+      padding: 12px;
+      background: #969A82;
+      color: #f0ede6;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .main-btn:hover { background: #7a7e6a; }
+    .main-btn:disabled { background: #BBBCA7; cursor: not-allowed; }
+
+    .status { margin-top: 12px; font-size: 0.9rem; color: #969A82; text-align: center; }
+
+    .result {
+      margin-top: 24px;
+      background: #E6E1D5;
+      border-radius: 12px;
+      padding: 20px;
+      white-space: pre-wrap;
+      font-size: 0.9rem;
+      line-height: 1.8;
+      color: #4a4a46;
+      display: none;
+      border-left: 3px solid #969A82;
+    }
+
+    .result-title { font-size: 1rem; font-weight: 700; color: #5a5c50; margin-bottom: 10px; }
+  </style>
+</head>
+<body>
+
+  <h1>🧠 AI Interview Prep</h1>
+  <p class="subtitle">Resume Analyser · JD Matcher · Interview Questions · Answer Evaluator</p>
+
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('analyse', this)">📄 Resume Analyser</button>
+    <button class="tab" onclick="switchTab('match', this)">🎯 JD Matcher</button>
+    <button class="tab" onclick="switchTab('questions', this)">❓ Interview Questions</button>
+    <button class="tab" onclick="switchTab('evaluate', this)">✍️ Answer Evaluator</button>
+  </div>
+
+  <div class="card">
+
+    <!-- Resume Analyser -->
+    <div class="section active" id="analyse">
+      <label>📄 Upload Resume (PDF only)</label>
+      <input type="file" id="resumeFile" accept=".pdf" />
+      <button class="main-btn" onclick="uploadResume()">Analyse My Resume</button>
+      <p class="status" id="analyseStatus"></p>
+      <div class="result" id="analyseResult">
+        <div class="result-title">✨ AI Feedback</div>
+        <div id="analyseFeedback"></div>
+      </div>
+    </div>
+
+    <!-- JD Matcher -->
+    <div class="section" id="match">
+      <label>📄 Upload Resume (PDF only)</label>
+      <input type="file" id="matchFile" accept=".pdf" />
+      <label>📋 Paste Job Description</label>
+      <textarea id="jobDesc" rows="6" placeholder="Paste the job description here..."></textarea>
+      <button class="main-btn" onclick="matchJD()">Match with JD</button>
+      <p class="status" id="matchStatus"></p>
+      <div class="result" id="matchResult">
+        <div class="result-title">🎯 Match Result</div>
+        <div id="matchFeedback"></div>
+      </div>
+    </div>
+
+    <!-- Interview Questions -->
+    <div class="section" id="questions">
+      <label>💼 Enter Job Role</label>
+      <input type="text" id="jobRole" placeholder="e.g. Java Backend Developer, Data Scientist..." />
+      <button class="main-btn" onclick="generateQuestions()">Generate Interview Questions</button>
+      <p class="status" id="questionsStatus"></p>
+      <div class="result" id="questionsResult">
+        <div class="result-title">❓ Interview Questions</div>
+        <div id="questionsFeedback"></div>
+      </div>
+    </div>
+
+    <!-- Answer Evaluator -->
+    <div class="section" id="evaluate">
+      <label>💼 Job Role</label>
+      <input type="text" id="evalJobRole" placeholder="e.g. Java Backend Developer..." />
+      <label>❓ Interview Question</label>
+      <input type="text" id="evalQuestion" placeholder="e.g. Tell me about yourself..." />
+      <label>✍️ Your Answer</label>
+      <textarea id="evalAnswer" rows="6" placeholder="Type your answer here..."></textarea>
+      <button class="main-btn" onclick="evaluateAnswer()">Evaluate My Answer</button>
+      <p class="status" id="evaluateStatus"></p>
+      <div class="result" id="evaluateResult">
+        <div class="result-title">📊 Answer Feedback</div>
+        <div id="evaluateFeedback"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    function switchTab(tab, el) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.getElementById(tab).classList.add('active');
+      el.classList.add('active');
+    }
+
+    async function uploadResume() {
+      const fileInput = document.getElementById('resumeFile');
+      const status = document.getElementById('analyseStatus');
+      const result = document.getElementById('analyseResult');
+      const feedback = document.getElementById('analyseFeedback');
+      if (!fileInput.files[0]) { status.textContent = '⚠️ Please select a PDF!'; return; }
+      const formData = new FormData();
+      formData.append('file', fileInput.files[0]);
+      status.textContent = '⏳ Analysing... please wait';
+      result.style.display = 'none';
+      try {
+        const response = await fetch('/resume/upload', { method: 'POST', body: formData });
+        if (!response.ok) throw new Error('Failed');
+        const data = await response.json();
+        feedback.textContent = data.aiFeedback;
+        result.style.display = 'block';
+        status.textContent = '✅ Done!';
+      } catch (err) { status.textContent = '❌ Something went wrong. Try again!'; }
+    }
+
+    async function matchJD() {
+      const fileInput = document.getElementById('matchFile');
+      const jobDesc = document.getElementById('jobDesc').value;
+      const status = document.getElementById('matchStatus');
+      const result = document.getElementById('matchResult');
+      const feedback = document.getElementById('matchFeedback');
+      if (!fileInput.files[0]) { status.textContent = '⚠️ Please select a PDF!'; return; }
+      if (!jobDesc.trim()) { status.textContent = '⚠️ Please paste a job description!'; return; }
+      const formData = new FormData();
+      formData.append('file', fileInput.files[0]);
+      formData.append('jobDescription', jobDesc);
+      status.textContent = '⏳ Matching... please wait';
+      result.style.display = 'none';
+      try {
+        const response = await fetch('/resume/match', { method: 'POST', body: formData });
+        if (!response.ok) throw new Error('Failed');
+        const data = await response.text();
+        feedback.textContent = data;
+        result.style.display = 'block';
+        status.textContent = '✅ Done!';
+      } catch (err) { status.textContent = '❌ Something went wrong. Try again!'; }
+    }
+
+    async function generateQuestions() {
+      const jobRole = document.getElementById('jobRole').value;
+      const status = document.getElementById('questionsStatus');
+      const result = document.getElementById('questionsResult');
+      const feedback = document.getElementById('questionsFeedback');
+      if (!jobRole.trim()) { status.textContent = '⚠️ Please enter a job role!'; return; }
+      const formData = new FormData();
+      formData.append('jobRole', jobRole);
+      status.textContent = '⏳ Generating questions... please wait';
+      result.style.display = 'none';
+      try {
+        const response = await fetch('/resume/interview-questions', { method: 'POST', body: formData });
+        if (!response.ok) throw new Error('Failed');
+        const data = await response.text();
+        feedback.textContent = data;
+        result.style.display = 'block';
+        status.textContent = '✅ Done!';
+      } catch (err) { status.textContent = '❌ Something went wrong. Try again!'; }
+    }
+
+    async function evaluateAnswer() {
+      const question = document.getElementById('evalQuestion').value;
+      const answer = document.getElementById('evalAnswer').value;
+      const jobRole = document.getElementById('evalJobRole').value;
+      const status = document.getElementById('evaluateStatus');
+      const result = document.getElementById('evaluateResult');
+      const feedback = document.getElementById('evaluateFeedback');
+      if (!jobRole.trim()) { status.textContent = '⚠️ Please enter job role!'; return; }
+      if (!question.trim()) { status.textContent = '⚠️ Please enter a question!'; return; }
+      if (!answer.trim()) { status.textContent = '⚠️ Please type your answer!'; return; }
+      const formData = new FormData();
+      formData.append('question', question);
+      formData.append('answer', answer);
+      formData.append('jobRole', jobRole);
+      status.textContent = '⏳ Evaluating... please wait';
+      result.style.display = 'none';
+      try {
+        const response = await fetch('/resume/evaluate-answer', { method: 'POST', body: formData });
+        if (!response.ok) throw new Error('Failed');
+        const data = await response.text();
+        feedback.textContent = data;
+        result.style.display = 'block';
+        status.textContent = '✅ Done!';
+      } catch (err) { status.textContent = '❌ Something went wrong. Try again!'; }
+    }
+  </script>
+
+</body>
+</html>
