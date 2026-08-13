@@ -128,5 +128,5 @@ src/main/java/com/interviewprep/interview_prep/
 ## 👩‍💻 Built By
 
 **Manvitha Kondreddy**  
-B.Tech Software Engineering — VIT-AP University  
+Integrated M.Tech Software Engineering — VIT-AP University  
 [GitHub](https://github.com/Manvitha-kondreddyy)
