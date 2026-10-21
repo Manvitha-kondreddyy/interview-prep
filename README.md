@@ -38,7 +38,7 @@ A full-stack web application built with Java Spring Boot that helps students and
 |---|---|
 | Java 21 | Core language |
 | Spring Boot 3.5.3 | Backend framework |
-| Groq API (LLaMA 3.3 70B) | AI model |
+| Groq API (gpt-oss-120b) | AI model |
 | Apache PDFBox 3.0.1 | PDF text extraction |
 | MySQL | Database |
 | Spring Data JPA | ORM |
